@@ -1,10 +1,9 @@
 import exercises1v2.Book;
 import exercises1v2.Threads;
+import exercises1v4.Fixture;
+import exercises1v4.FixtureGenerator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -31,19 +30,38 @@ public class Main {
 //        List<Book> bookList = books.stream().filter(book -> book.getPageSize() > 600).toList();
 //        bookList.forEach((book) -> System.out.println("600 PAGESIZE BOOK : "+ book.getName() + "AUTHOR : " + book.getAuthor()));
 
+//
+//        Threads threads = new Threads();
+//
+//        ExecutorService executorService = Executors.newFixedThreadPool(12);
+//
+//        for (int i = 0; i < 1000; i++) {
+//            executorService.execute(threads);
+//        }
+//        executorService.shutdown();
+//        try {
+//            executorService.awaitTermination(5, TimeUnit.SECONDS);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
-        Threads threads = new Threads();
+        FixtureGenerator<String> fixtureGenerator = new FixtureGenerator();
+        List<String> teams = new LinkedList<String>();
 
-        ExecutorService executorService = Executors.newFixedThreadPool(12);
+        teams.add("Galatasaray");
+        teams.add("Fenerbahçe");
+        teams.add("Beşiktaş");
+        teams.add("Trabzonspor");
 
-        for (int i = 0; i < 1000; i++) {
-            executorService.execute(threads);
-        }
-        executorService.shutdown();
-        try {
-            executorService.awaitTermination(5, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        List<List<Fixture<String>>> rounds = fixtureGenerator.getFixtures(teams, true);
+
+        for (int i = 0; i < rounds.size(); i++) {
+            System.out.println("Round " + (i + 1));
+            List<Fixture<String>> round = rounds.get(i);
+            for (Fixture<String> fixture : round) {
+                System.out.println(fixture.getHomeTeam() + " vs " + fixture.getAwayTeam());
+            }
+            System.out.println("");
         }
     }
 }
